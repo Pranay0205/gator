@@ -1,6 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"context"
+	"database/sql"
+	"errors"
+	"fmt"
+	"log"
+)
 
 
 func handlerLogin(s *state, cmd command) error {
@@ -10,7 +16,16 @@ func handlerLogin(s *state, cmd command) error {
 
 	username := cmd.Args[0]
 
-	err := s.Cfg.SetUser(username)
+	user, err := s.db.GetUser(context.Background(), username)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows){
+			log.Fatalf("user doesn't exists in the database")
+		}
+		return fmt.Errorf("database error: %v", err)
+	}
+
+	err = s.Cfg.SetUser(user.Name)
 	if err != nil {
 		return fmt.Errorf("unable to login: %v", err)
 	}
