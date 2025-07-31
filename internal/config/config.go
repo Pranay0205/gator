@@ -82,7 +82,7 @@ func write(cfg *Config)  error {
 
 func (cfg *Config) SetUser(username string) error{
 
-		if username == "" || len(username) == 0 {
+		if len(username) == 0 {
 			return fmt.Errorf("unable to find username")
 		}
 

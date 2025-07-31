@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"os"
 
 	"github.com/Pranay0205/gator/internal/config"
 )
@@ -12,11 +13,30 @@ import (
 func main() {
 		config, err := config.Read()
     if err != nil {
-        fmt.Printf("Error reading config: %v\n", err)
-        return
+        log.Fatalf("error reading config: %v", err)
     }
 
-		config.SetUser("pranay")
+    appState := state{Cfg: config}
 
-    fmt.Printf("Database URL: %s\n", config)
+    cmdHandler := commands{commandHandler: make(map[string]func(*state, command) error)}
+
+    cmdHandler.register("login", handlerLogin)
+
+    args := os.Args
+
+    if len(args) < 2 {
+      log.Fatal("Usage: cli <command> [args...]")
+    } 
+
+    cmdName, arguments := args[1], args[2:] 
+
+    cmd := command{Name: cmdName, Args: arguments}
+
+    err = cmdHandler.run(&appState, cmd)
+    
+    if err != nil {
+      log.Fatal(err)
+    }
+
+
 }
