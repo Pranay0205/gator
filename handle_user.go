@@ -89,7 +89,24 @@ func handlerRegister(s *state, cmd command) error {
 		return nil
 }
 
+func handlerUser(s *state, cmd command) error {
+	if len(cmd.Args) != 1 {
+		return fmt.Errorf("usage: %v <name>", cmd.Name)
+	}
+
+	user, err := s.db.GetUser(context.Background(), cmd.Args[0])
+	if err != nil{
+		return fmt.Errorf("error finding the name %s: %w", cmd.Args[0], err)
+	}
+
+	printUser(user)
+
+	return nil
+}
+
 func printUser(user database.User) {
-	fmt.Printf(" * ID:      %v\n", user.ID)
-	fmt.Printf(" * Name:    %v\n", user.Name)
+	fmt.Printf(" * %-15s %v\n", "ID:", user.ID)
+	fmt.Printf(" * %-15s %v\n", "Name:", user.Name)
+	fmt.Printf(" * %-15s %v\n", "Created Date:", user.CreatedAt.Format("2006-01-02 15:04:05"))
+	fmt.Printf(" * %-15s %v\n", "Updated Date:", user.UpdatedAt.Format("2006-01-02 15:04:05"))
 }
