@@ -12,3 +12,11 @@ RETURNING *;
 -- name: GetUser :one
 SELECT * FROM users 
 WHERE name = $1 LIMIT 1;
+
+
+-- name: TruncateUser :exec
+TRUNCATE TABLE users;
+
+
+-- name: GetUsers :many
+SELECT * FROM users LIMIT 100;

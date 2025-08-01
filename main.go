@@ -34,8 +34,12 @@ func main() {
 
     cmdHandler.register("login", handlerLogin)
 
-    cmdHandler.register("register", handleRegister)
+    cmdHandler.register("register", handlerRegister)
+    
+    cmdHandler.register("reset", handlerReset)
 
+    cmdHandler.register("users", handlerUsers)
+    
     args := os.Args
 
     if len(args) < 2 {
