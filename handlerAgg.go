@@ -7,14 +7,9 @@ import (
 	"github.com/Pranay0205/gator/internal/rss"
 )
 
+const feedURL = "https://www.wagslane.dev/index.xml"
 
 func handlerAgg(s *state, cmd command) error {
-	if len(cmd.Args) != 1 {
-		return fmt.Errorf("usage: %v <url>", cmd.Name)
-	}
-
-	feedURL := cmd.Args[0]
-
 	rssFeed, err := rss.FetchFeed(context.Background(), feedURL)
 
 	if err != nil {
