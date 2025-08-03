@@ -41,6 +41,8 @@ func main() {
     cmdHandler.register("users", handlerUsers)
 
     cmdHandler.register("user", handlerUser)
+
+    cmdHandler.register("agg", handlerAgg)
     
     args := os.Args
 
