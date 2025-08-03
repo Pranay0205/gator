@@ -11,5 +11,12 @@ VALUES (
 RETURNING *;
 
 
--- name: GetFeed :many
-SELECT * FROM feeds LIMIT 100;
+-- name: GetFeeds :many
+SELECT
+  f.name AS feed_name,
+  f.url,
+  u.name AS user_name
+FROM
+  feeds AS f
+INNER JOIN
+  users AS u ON f.user_id = u.id;

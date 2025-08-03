@@ -3,13 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/Pranay0205/gator/internal/database"
 	"github.com/google/uuid"
 )
 
-func addFeed(s *state, cmd command) error {
+func handlerAddFeed(s *state, cmd command) error {
 	if len(cmd.Args) != 2 {
 			return fmt.Errorf("usage: %v <name> <url>", cmd.Name)
 	}
@@ -40,6 +41,28 @@ func addFeed(s *state, cmd command) error {
 	return nil
 }
 
+
+func handlerListFeeds(s *state, cmd command) error {
+	feedRows, err := s.db.GetFeeds(context.Background())
+
+	if err != nil {
+		return fmt.Errorf("coudn't get the feed from database: %w", err)
+	}
+	separator := strings.Repeat("=", 50)
+	
+	for _, row := range feedRows {
+			fmt.Printf(
+				"Feed Name: %s\nFeed URL: %s\nUsername: %s\n%s\n",
+				row.FeedName,
+				row.Url,
+				row.UserName,
+				separator,
+			)
+		}
+
+	return nil
+	
+}
 
 
 func printFeed(feed database.Feed) {

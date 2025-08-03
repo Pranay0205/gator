@@ -44,7 +44,9 @@ func main() {
 
     cmdHandler.register("agg", handlerAgg)
 
-    cmdHandler.register("addfeed", addFeed)
+    cmdHandler.register("addfeed", handlerAddFeed)
+
+    cmdHandler.register("feeds", handlerListFeeds)
     
     args := os.Args
 
