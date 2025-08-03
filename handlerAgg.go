@@ -16,13 +16,13 @@ func handlerAgg(s *state, cmd command) error {
 		return fmt.Errorf("failed to fetch RSS feed: %w", err)
 	}
 
-	printFeed(*rssFeed)
+	printRSSFeed(*rssFeed)
 
 	return nil
 
 }
 
-func printFeed(rssFeed rss.RSSFeed){
+func printRSSFeed(rssFeed rss.RSSFeed){
 	fmt.Printf("Title: %s\n", rssFeed.Channel.Title)
 	fmt.Printf("Description: %s\n", rssFeed.Channel.Description)
 	for i := range rssFeed.Channel.Item {

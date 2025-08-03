@@ -43,6 +43,8 @@ func main() {
     cmdHandler.register("user", handlerUser)
 
     cmdHandler.register("agg", handlerAgg)
+
+    cmdHandler.register("addfeed", addFeed)
     
     args := os.Args
 

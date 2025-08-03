@@ -14,8 +14,8 @@ SELECT * FROM users
 WHERE name = $1 LIMIT 1;
 
 
--- name: TruncateUser :exec
-TRUNCATE TABLE users;
+-- name: DeleteUser :exec
+DELETE FROM users;
 
 
 -- name: GetUsers :many
