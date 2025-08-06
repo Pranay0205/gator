@@ -50,6 +50,8 @@ func main() {
 
     cmdHandler.register("follow", middlewareLoggedIn(handlerFollowFeed))
 
+    cmdHandler.register("unfollow", middlewareLoggedIn(handlerUnfollowFeed))
+    
     cmdHandler.register("following", middlewareLoggedIn(handlerFollowFeedForUser))
     
     args := os.Args
