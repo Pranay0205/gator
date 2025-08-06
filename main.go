@@ -44,13 +44,13 @@ func main() {
 
     cmdHandler.register("agg", handlerAgg)
 
-    cmdHandler.register("addfeed", handlerAddFeed)
+    cmdHandler.register("addfeed", middlewareLoggedIn(handlerAddFeed))
 
     cmdHandler.register("feeds", handlerListFeeds)
 
-    cmdHandler.register("follow", handlerFollowFeed)
+    cmdHandler.register("follow", middlewareLoggedIn(handlerFollowFeed))
 
-    cmdHandler.register("following", handlerFollowFeedForUser)
+    cmdHandler.register("following", middlewareLoggedIn(handlerFollowFeedForUser))
     
     args := os.Args
 
