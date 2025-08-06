@@ -15,7 +15,7 @@ func handlerFollowFeed(s *state, cmd command, user database.User) error {
 		return fmt.Errorf("usage: %v <url>", cmd.Name)
 	}
 
-	feed, err := s.db.GetFeed(context.Background(), strings.TrimSpace(cmd.Args[0])) 
+	feed, err := s.db.GetFeedByURL(context.Background(), strings.TrimSpace(cmd.Args[0])) 
 
 	if err != nil {
 		return fmt.Errorf("coudn't get the feed details: %w", err)

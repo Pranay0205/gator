@@ -22,7 +22,7 @@ INNER JOIN
   users AS u ON f.user_id = u.id;
 
 
--- name: GetFeed :one
+-- name: GetFeedByURL :one
 SELECT id, created_at, updated_at, name, url, user_id FROM feeds WHERE url = $1 LIMIT 1;
 
 

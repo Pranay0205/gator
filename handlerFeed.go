@@ -77,7 +77,7 @@ func handlerUnfollowFeed(s *state, cmd command, user database.User) error {
         return fmt.Errorf("usage: %v <url>", cmd.Name)
     }
 
-    feed, err := s.db.GetFeed(context.Background(), cmd.Args[0])
+    feed, err := s.db.GetFeedByURL(context.Background(), cmd.Args[0])
     if err != nil {
         return fmt.Errorf("couldn't find feed: %w", err)
     }
