@@ -17,7 +17,11 @@ type command struct {
 	Args []string
 }
 
-
+// TO DO - FOR SHOWING ALL COMMANDS WITH DESCRIPTION REFACTORING OF CODE IS NEEDED
+// type commandDetails struct {
+// 	handler func(*state, command) error
+// 	description string	
+// }
 
 type commands struct {
 	commandHandler map[string]func(*state, command) error
@@ -37,6 +41,18 @@ func (c *commands) run(s *state, cmd command) error {
 	}
 
 	return nil
+}
+
+func (c *commands) getHelp() error {
+		if len(c.commandHandler) == 0 {
+			return fmt.Errorf("no commands registered")
+		}
+		fmt.Println("\nPlease use below commands for using gator:")
+		for commandName := range c.commandHandler {
+			fmt.Printf("* Command: %s\n", commandName)
+		}
+
+		return nil
 }
 
 
