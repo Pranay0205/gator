@@ -23,7 +23,7 @@ func handlerLogin(s *state, cmd command) error {
 	user, err := s.db.GetUser(context.Background(), username)
 
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows){
+		if errors.Is(err, sql.ErrNoRows) {
 			return fmt.Errorf("user doesn't exists in the database")
 		}
 		return fmt.Errorf("database error: %v", err)
@@ -34,11 +34,8 @@ func handlerLogin(s *state, cmd command) error {
 		return fmt.Errorf("unable to login: %v", err)
 	}
 
-
-
 	return nil
 }
-
 
 // List Of Users
 func handlerUsers(s *state, cmd command) error {
@@ -61,32 +58,32 @@ func handlerUsers(s *state, cmd command) error {
 
 // Register User
 func handlerRegister(s *state, cmd command) error {
-		if len(cmd.Args) != 1 {
-			return fmt.Errorf("usage: %v <name>", cmd.Name)
-		}
+	if len(cmd.Args) != 1 {
+		return fmt.Errorf("usage: %v <name>", cmd.Name)
+	}
 
-		user, err := s.db.CreateUser(context.Background(), database.CreateUserParams{
-			ID: uuid.New(),
-			CreatedAt: time.Now().UTC(),
-			UpdatedAt: time.Now().UTC(),
-			Name: cmd.Args[0],
-		})
+	user, err := s.db.CreateUser(context.Background(), database.CreateUserParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
+		Name:      cmd.Args[0],
+	})
 
-		if err != nil {
-			if pqError, ok := err.(*pq.Error); ok{
-				if pqError.Code == "23505" {
-					return fmt.Errorf("username already exists")
-				}
+	if err != nil {
+		if pqError, ok := err.(*pq.Error); ok {
+			if pqError.Code == "23505" {
+				return fmt.Errorf("username already exists")
 			}
-			return fmt.Errorf("failed to create user: %w", err)
 		}
+		return fmt.Errorf("failed to create user: %w", err)
+	}
 
-		s.Cfg.SetUser(user.Name)
+	s.Cfg.SetUser(user.Name)
 
-		fmt.Printf("user was created")
-		printUser(user)
+	fmt.Printf("user was created")
+	printUser(user)
 
-		return nil
+	return nil
 }
 
 func handlerUser(s *state, cmd command) error {
@@ -95,7 +92,7 @@ func handlerUser(s *state, cmd command) error {
 	}
 
 	user, err := s.db.GetUser(context.Background(), cmd.Args[0])
-	if err != nil{
+	if err != nil {
 		return fmt.Errorf("error finding the name %s: %w", cmd.Args[0], err)
 	}
 

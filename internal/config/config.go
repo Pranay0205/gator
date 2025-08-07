@@ -9,15 +9,13 @@ import (
 
 const configfilename = ".gatorconfig.json"
 
-
 type Config struct {
-    DbURL string `json:"db_url"`
-		Username string `json:"current_user_name"`
+	DbURL    string `json:"db_url"`
+	Username string `json:"current_user_name"`
 }
 
-
 func Read() (*Config, error) {
-	
+
 	configFilePath, err := getConfigFilePath()
 
 	if err != nil {
@@ -35,7 +33,7 @@ func Read() (*Config, error) {
 	var config Config
 
 	decoder := json.NewDecoder(file)
-	
+
 	err = decoder.Decode(&config)
 
 	if err != nil {
@@ -47,7 +45,7 @@ func Read() (*Config, error) {
 
 func getConfigFilePath() (string, error) {
 	homedir, err := os.UserHomeDir()
-	
+
 	if err != nil {
 		return "", fmt.Errorf("could not find home directory: %v", err)
 	}
@@ -57,7 +55,7 @@ func getConfigFilePath() (string, error) {
 	return fullPath, nil
 }
 
-func write(cfg *Config)  error {
+func write(cfg *Config) error {
 
 	fullPath, err := getConfigFilePath()
 	if err != nil {
@@ -80,20 +78,19 @@ func write(cfg *Config)  error {
 
 }
 
-func (cfg *Config) SetUser(username string) error{
+func (cfg *Config) SetUser(username string) error {
 
-		if len(username) == 0 {
-			return fmt.Errorf("unable to find username")
-		}
+	if len(username) == 0 {
+		return fmt.Errorf("unable to find username")
+	}
 
-		cfg.Username = username
+	cfg.Username = username
 
-		err := write(cfg)
+	err := write(cfg)
 
-		if err != nil {
-			return fmt.Errorf("unable to write username to config file: %v", err)
-		}
+	if err != nil {
+		return fmt.Errorf("unable to write username to config file: %v", err)
+	}
 
-		return nil
+	return nil
 }
-

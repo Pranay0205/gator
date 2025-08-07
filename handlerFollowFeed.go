@@ -15,18 +15,18 @@ func handlerFollowFeed(s *state, cmd command, user database.User) error {
 		return fmt.Errorf("usage: %v <url>", cmd.Name)
 	}
 
-	feed, err := s.db.GetFeedByURL(context.Background(), strings.TrimSpace(cmd.Args[0])) 
+	feed, err := s.db.GetFeedByURL(context.Background(), strings.TrimSpace(cmd.Args[0]))
 
 	if err != nil {
 		return fmt.Errorf("coudn't get the feed details: %w", err)
 	}
 
 	followedFeed, err := s.db.CreateFeedFollow(context.Background(), database.CreateFeedFollowParams{
-		ID: uuid.New(),
+		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
-		UserID: user.ID,
-		FeedID: feed.ID,
+		UserID:    user.ID,
+		FeedID:    feed.ID,
 	})
 
 	if err != nil {
@@ -39,8 +39,6 @@ func handlerFollowFeed(s *state, cmd command, user database.User) error {
 
 }
 
-
-
 func handlerFollowFeedForUser(s *state, cmd command, user database.User) error {
 
 	followFeedRows, err := s.db.GetFollowFeedForUser(context.Background(), user.ID)
@@ -51,9 +49,8 @@ func handlerFollowFeedForUser(s *state, cmd command, user database.User) error {
 
 	fmt.Println("User follows below feeds:")
 	for i, feed := range followFeedRows {
-		fmt.Printf("%d) %v\n", i + 1, feed.Name)
+		fmt.Printf("%d) %v\n", i+1, feed.Name)
 	}
 
 	return nil
 }
-

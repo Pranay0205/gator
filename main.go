@@ -11,56 +11,50 @@ import (
 	_ "github.com/lib/pq"
 )
 
-
-
-
 func main() {
-		config, err := config.Read()
-    if err != nil {
-        log.Fatalf("error reading config: %v", err)
-    }
+	config, err := config.Read()
+	if err != nil {
+		log.Fatalf("error reading config: %v", err)
+	}
 
-    db, err := sql.Open("postgres", config.DbURL)
-    if err != nil{
-      log.Fatalf("error connecting to the database: %v", err)
-    }
+	db, err := sql.Open("postgres", config.DbURL)
+	if err != nil {
+		log.Fatalf("error connecting to the database: %v", err)
+	}
 
-    dbQueries := database.New(db)
+	dbQueries := database.New(db)
 
+	appState := state{Cfg: config, db: dbQueries}
 
-    appState := state{Cfg: config, db: dbQueries}
+	cmdHandler := commands{commandHandler: make(map[string]func(*state, command) error)}
 
-    cmdHandler := commands{commandHandler: make(map[string]func(*state, command) error)}
-   
-    cmdHandler.register("login", handlerLogin)
-    cmdHandler.register("register", handlerRegister)
-    cmdHandler.register("reset", handlerReset)
-    cmdHandler.register("users", handlerUsers)
-    cmdHandler.register("user", handlerUser)
-    cmdHandler.register("agg", handlerAgg)
-    cmdHandler.register("addfeed", middlewareLoggedIn(handlerAddFeed))
-    cmdHandler.register("feeds", handlerListFeeds)
-    cmdHandler.register("follow", middlewareLoggedIn(handlerFollowFeed))
-    cmdHandler.register("unfollow", middlewareLoggedIn(handlerUnfollowFeed))
-    cmdHandler.register("following", middlewareLoggedIn(handlerFollowFeedForUser))
-    
-    
-    args := os.Args
+	cmdHandler.register("login", handlerLogin)
+	cmdHandler.register("register", handlerRegister)
+	cmdHandler.register("reset", handlerReset)
+	cmdHandler.register("users", handlerUsers)
+	cmdHandler.register("user", handlerUser)
+	cmdHandler.register("agg", handlerAgg)
+	cmdHandler.register("addfeed", middlewareLoggedIn(handlerAddFeed))
+	cmdHandler.register("feeds", handlerListFeeds)
+	cmdHandler.register("follow", middlewareLoggedIn(handlerFollowFeed))
+	cmdHandler.register("unfollow", middlewareLoggedIn(handlerUnfollowFeed))
+	cmdHandler.register("following", middlewareLoggedIn(handlerFollowFeedForUser))
 
-    if len(args) < 2 {
-      cmdHandler.getHelp()
-      log.Fatal("Usage: cli <command> [args...]")
-    } 
+	args := os.Args
 
-    cmdName, arguments := args[1], args[2:] 
+	if len(args) < 2 {
+		cmdHandler.getHelp()
+		log.Fatal("Usage: cli <command> [args...]")
+	}
 
-    cmd := command{Name: cmdName, Args: arguments}
-   
-    err = cmdHandler.run(&appState, cmd)
-    
-    if err != nil {
-      log.Fatal(err)
-    }
+	cmdName, arguments := args[1], args[2:]
 
+	cmd := command{Name: cmdName, Args: arguments}
+
+	err = cmdHandler.run(&appState, cmd)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
