@@ -30,4 +30,4 @@ INNER JOIN
   feeds AS f ON p.feed_id = f.id
 ORDER BY
   p.published_at DESC
-LIMIT 100;
+LIMIT $1;

@@ -80,7 +80,7 @@ INNER JOIN
   feeds AS f ON p.feed_id = f.id
 ORDER BY
   p.published_at DESC
-LIMIT 100
+LIMIT $1
 `
 
 type GetPostsRow struct {
@@ -94,8 +94,8 @@ type GetPostsRow struct {
 	FeedName    string
 }
 
-func (q *Queries) GetPosts(ctx context.Context) ([]GetPostsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getPosts)
+func (q *Queries) GetPosts(ctx context.Context, limit int32) ([]GetPostsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getPosts, limit)
 	if err != nil {
 		return nil, err
 	}
